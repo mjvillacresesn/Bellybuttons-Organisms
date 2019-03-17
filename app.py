@@ -78,6 +78,23 @@ def sample_metadata(sample):
     #print(sample_metadata)
     return jsonify(sample_metadata)
 
+########BONUS#################
+@app.route("/wfreq/<sample>")
+def wfreq(sample):
+
+    """Return a 'WFREQ' value from users input from 'sample id' """
+    gageresult = db.session.query(Samples_Metadata.WFREQ).filter(Samples_Metadata.sample == sample).first()
+    
+    """ Prettify results """
+    # result_gage = {}
+    # result_gage['WFREQ'] = gageresult
+
+    #print(gageresult)
+    #print(result_gage)
+
+    return jsonify(gageresult)
+
+
 
 @app.route("/samples/<sample>")
 def samples(sample):
@@ -96,6 +113,7 @@ def samples(sample):
         "otu_labels": sample_data.otu_label.tolist(),
     }
     return jsonify(data)
+
 
 
 if __name__ == "__main__":

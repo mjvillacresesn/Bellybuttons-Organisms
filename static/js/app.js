@@ -7,7 +7,7 @@ function buildMetadata(sample) {
 
     // select div id #
     var sample_metadata = d3.select("#sample-metadata");
-
+    
     // clear existing metadata
     sample_metadata.html("");
 
@@ -18,7 +18,7 @@ function buildMetadata(sample) {
       var row = sample_metadata.append("p");
       row.text(`${key}: ${value}`);
 
-    
+          
     });
   });
 };
@@ -27,8 +27,80 @@ function buildMetadata(sample) {
 // BONUS: Build the Gauge Chart
     // buildGauge(data.WFREQ);
 
+// d3.select("#selDataset");
+
+var selectioninput = `/wfreq/<sample>`;
+d3.json(selectioninput).then(function(level) {
+
+// // Enter a speed between 0 and 180
+// var level = 4;
+  // Trig to calc meter point
+  var degrees = 9 - level,
+      radius = .5;
+  var radians = degrees * Math.PI / 9;
+  var x = radius * Math.cos(radians);
+  var y = radius * Math.sin(radians);
+
+  // Path: may have to change to create a better triangle
+  var mainPath = 'M -.0 -0.025 L .0 0.025 L ',
+      pathX = String(x),
+      space = ' ',
+      pathY = String(y),
+      pathEnd = ' Z';
+  var path = mainPath.concat(pathX,space,pathY,pathEnd);
+
+  var data = [{ type: 'scatter',
+      x: [0], y:[0],
+      marker: {size: 38, color:'850000'},
+      showlegend: false,
+      name: 'Wash-Freqcy',
+      text: level,
+      hoverinfo: 'text+name'},
+  { values: [50/9,50/9,50/9,50/9,50/9,50/9,50/9,50/9,50/9,50],
+  rotation: 90,
+  text: ['8-9', '7-8', '6-7', '5-6',
+          '4-5', '3-4', '2-3', '1-2', '0-1' ,''],
+  textinfo: 'text',
+  textposition:'inside',
+  marker: {colors:['rgb(33, 188, 148)','rgb(114, 208, 148)','rgba(14, 127, 0, .5)', 'rgb(166, 188, 148)', 'rgba(110, 154, 22, .5)',
+                          'rgba(170, 202, 42, .5)', 'rgba(202, 209, 95, .5)',
+                          'rgba(210, 206, 145, .5)', 'rgba(232, 226, 202, .5)', 'FFFFFF']},
+  labels: ['8-9', '7-8', '6-7', '5-6',
+          '4-5', '3-4', '2-3', '1-2', '0-1' ,''],
+  hoverinfo: 'label',
+  hole: .5,
+  type: 'pie',
+  showlegend: false
+  }];
+
+  var layout = {
+  shapes:[{
+      type: 'path',
+      path: path,
+      fillcolor: '850000',
+      line: {
+          color: '850000'
+      }
+      }],
+  title: '<b>Belly Button Washing Frequency</b> <br> Scrubs per week', 
+  Speed: 0-9,
+  height: 450,
+  width: 450,
+  xaxis: {zeroline:false, showticklabels:false,
+              showgrid: false, range: [-1, 1]},
+  yaxis: {zeroline:false, showticklabels:false,
+              showgrid: false, range: [-1, 1]}
+  };
+
+  Plotly.newPlot('gauge', data, layout);
 
 
+//end below 
+//Updating...
+
+});
+
+/////////
 
 function buildCharts(sample) {
 
@@ -112,130 +184,5 @@ function optionChanged(newSample) {
 
 // Initialize the dashboard
 init();
-
-
-////////////////////////////////////////////////////////////////////////////////
-// ref: https://plot.ly/python/gauge-charts/#gauge-chart-outline //
-//Gauge
-// Plotly.d3.json("/wfreq/BB_940", function(error, level){
-//   gauge(level);
-// })
-
-// function gauge(level) {
-//     var degrees = 9 - level,
-//     	radius = .5;
-//     var radians = degrees * Math.PI / 9;
-//     var x = radius * Math.cos(radians);
-//     var y = radius * Math.sin(radians);
-//     var mainPath = 'M -.0 -0.025 L .0 0.025 L ',
-// 		  pathX = String(x),
-//      	space = ' ',
-// 	 	  pathY = String(y),
-//       pathEnd = ' Z';
-//     var path = mainPath.concat(pathX,space,pathY,pathEnd);
-//     var data = [{ type: 'scatter',
-//    		x: [0], y:[0],
-//     	marker: {size: 28, color:'850000'},
-//     	showlegend: false,
-//     	name: 'Wash Frequency',
-//     	text: level,
-//       // direction: "counter-clockwise",
-//     	hoverinfo: 'text+name'},
-//   		{ values: [50/9,50/9,50/9,50/9,50/9,50/9,50/9,50/9,50/9,50],
-//   		rotation: 90,
-//   		text: ['8-9', '7-8', '6-7', '5-6',
-//             '4-5', '3-4', '2-3', '1-2', '0-1' ,''],
-//   		textinfo: 'text',
-//   		textposition:'inside',      
-//   		marker: {colors:['#008000','#228d1b','#359a2d','#46a83e','#55b54e','#64c35f','#73d26f','#81e07f','#90ee90','FFFFFF']},
-//   		hoverinfo: 'text',
-//   		hole: .5,
-//   		type: 'pie',
-//   		showlegend: false
-// 		}];
-
-// 	var layout = {
-// 		shapes:[{
-// 	    	type: 'path',
-//       		path: path,
-// 	     	fillcolor: '850000',
-// 	     	line: {
-// 	        color: '850000'
-// 	      }
-// 	    }],
-// 		title: '<b>Who has been washing their hands a lot?</b> <br> Frequency 0-9',
-// 		height: 500,
-// 		width: 600,
-//     margin: {
-//       l: 25, r: 25, b: 25, t: 75
-//     },
-// 		xaxis: {zeroline:false, showticklabels:false, showgrid: false, range: [-1, 1]},
-// 		yaxis: {zeroline:false, showticklabels:false, showgrid: false, range: [-1, 1]}
-// 	};
-// 	Plotly.plot("gauge", data, layout);
-// };
-
-
-// //Updates
-// function optionChanged(sample) {
-//   var sampURL = `/samples/${sample}`
-//   var metaURL = `/metadata/${sample}`
-//   var wfreqURL = `/wfreq/${sample}`
-
-//   // New data 
-//   //otu and sample data
-//   Plotly.d3.json(sampURL, function(error, newdata) {
-//     if (error) return console.warn(error);
-//     newOTU(newdata);
-//   });
-
-//   //metatable
-//   Plotly.d3.json(metaURL, function(error, response) {
-//     if (error) return console.warn(error);
-//     var newhtmltable = [];
-//     for (key in response) {
-//     newhtmltable += "<b>" + key + ": " + " </b>"+ response[key] + "<br>";
-//     }
-//     metatable.innerHTML = newhtmltable
-//   })
-
-//   //freq for gauge
-//   Plotly.d3.json(wfreqURL), function(error,newfreq) {
-//     if (error) return console.warn(error);
-//     gauge(newfreq)
-//   }
-// }
-
-// //restyle
-// function newOTU(newdata){
-//   Plotly.d3.json("/otu", function(error, otu) {
-//     if (error) return console.warn(error);
-//     updatePlots(otu, newdata);
-//   })
-// }
-
-// function updatePlots(otu, newdata) {
-//   // OTU
-//   var new_otu = [];
-//   for (i in newdata.otu_ids) {
-//         new_otu.push(otu[i]);
-//   }
-//   // Pie
-//   var newPie = document.getElementById("pie");
-//   Plotly.restyle(newPie, "labels", [newdata.otu_ids.slice(0,10)]);
-//   Plotly.restyle(newPie, "values", [newdata.sample_values.slice(0,10)]);
-//   Plotly.restyle(newPie, "text", [new_otu.slice(0,10)]);
-//   // Bub
-//   var newBubble = document.getElementById("bubble");
-//   Plotly.restyle(newBubble, "x", [newdata.otu_ids]);
-//   Plotly.restyle(newBubble, "y", [newdata.sample_values]);
-//   Plotly.restyle(newBubble, "text", [new_otu]);
-// }
-
-
-
-
-
-
 
 
