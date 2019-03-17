@@ -1,0 +1,16 @@
+/* The styles for the parallax */
+.hero {
+    position: relative;
+    /* height: 1000px;
+    padding: 20px;
+    margin: 0; */
+    /* background: rgb(98, 218, 182); */
+    background-image: url("../img/bacteria_by_filterforgedotcom.jpg");
+    background-attachment: fixed;
+    background-position: bottom center;
+    background-size: cover;
+  }
+
+/* body {
+    background-image: url("../img/bacteria_by_filterforgedotcom.jpg");
+} */
